@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application 
+metadata:
+  name: 3tierwebapp-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:  
+    repoURL: https://github.com/omar1111eamsa/gitops-configs.git
+    tergetRevision: HEAD
+    path: 3tire-configs
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: 3tirewebapp-dev
+  SyncPolicy:
+    automated: 
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ApplyOutOfSyncOnly=ture
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
