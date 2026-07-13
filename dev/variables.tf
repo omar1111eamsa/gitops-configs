@@ -71,3 +71,15 @@ variable "postgres_database" {
   type        = string
   default     = "appdb"
 }
+
+variable "gitops_repo_url" {
+  description = "URL of the GitOps repo containing your Kubernetes manifests (the one ArgoCD watches)"
+  type        = string
+  # No default — you must set this in terraform.tfvars to YOUR repo
+}
+
+variable "gitops_repo_path" {
+  description = "Path inside the GitOps repo where the manifests/kustomization.yaml live"
+  type        = string
+  default     = "manifest-files/3tire-configs"
+}
