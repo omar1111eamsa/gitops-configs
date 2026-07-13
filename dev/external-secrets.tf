@@ -47,3 +47,38 @@ resource "kubectl_manifest" "secret_store" {
     azurerm_key_vault_access_policy.aks_kubelet
   ]
 }
+
+resource "kubectl_manifest" "postgres_external_secret" {
+  yaml_body = <<-YAML
+    apiVersion: external-secrets.io/v1beta1
+    kind: ExternalSecret
+    metadata:
+      name: postgres-credentials
+      namespace: 3tirewebapp-dev
+    spec:
+      refreshInterval: 1h
+      secretStoreRef:
+        name: azure-keyvault-store
+        kind: SecretStore
+      target:
+        name: postgres-credentials-from-kv
+        creationPolicy: Owner
+      data:
+        - secretKey: POSTGRES_USER
+          remoteRef:
+            key: postgres-username
+        - secretKey: POSTGRES_PASSWORD
+          remoteRef:
+            key: postgres-password
+        - secretKey: POSTGRES_DB
+          remoteRef:
+            key: postgres-database
+  YAML
+
+  depends_on = [
+    kubectl_manifest.secret_store,
+    azurerm_key_vault_secret.postgres_username,
+    azurerm_key_vault_secret.postgres_password,
+    azurerm_key_vault_secret.postgres_database
+  ]
+}
