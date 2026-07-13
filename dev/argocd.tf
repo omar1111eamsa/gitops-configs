@@ -44,3 +44,41 @@ resource "helm_release" "argocd" {
 
   depends_on = [kubernetes_namespace.argocd]
 }
+
+resource "kubectl_manifest" "app" {
+  yaml_body = <<-YAML
+    apiVersion: argoproj.io/v1alpha1
+    kind: Application
+    metadata:
+      name: 3tierwebapp-dev
+      namespace: argocd
+      finalizers:
+        - resources-finalizer.argocd.argoproj.io
+    spec:
+      project: default
+      source:
+        repoURL: ${var.gitops_repo_url}
+        targetRevision: HEAD
+        path: ${var.gitops_repo_path}
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: 3tirewebapp-dev
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+          - CreateNamespace=false
+        retry:
+          limit: 5
+          backoff:
+            duration: 5s
+            factor: 2
+            maxDuration: 3m
+  YAML
+
+  depends_on = [
+    helm_release.argocd,
+    kubernetes_namespace.app
+  ]
+}
