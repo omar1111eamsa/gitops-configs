@@ -1,10 +1,5 @@
 data "azurerm_client_config" "current" {}
 
-resource "azurerm_role_assignment" "aks_admin" {
-  scope                = azurerm_kubernetes_cluster.main.id
-  role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
 
 resource "azurerm_resource_group" "main" {
   name     = "${var.resource_group_name}-${var.environment}"
@@ -49,17 +44,11 @@ resource "azurerm_kubernetes_cluster" "main" {
   }
 }
 
-resource "azurerm_role_assignment" "aks_network_contributor" {
-  scope                = azurerm_resource_group.main.id
-  role_definition_name = "Network Contributor"
-  principal_id         = azurerm_kubernetes_cluster.main.identity[0].principal_id
-}
+
 
 resource "time_sleep" "wait_for_cluster" {
   depends_on = [
     azurerm_kubernetes_cluster.main,
-    azurerm_role_assignment.aks_admin,
-    azurerm_role_assignment.aks_network_contributor
   ]
   create_duration = "60s"
 }
