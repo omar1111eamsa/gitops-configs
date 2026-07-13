@@ -39,3 +39,27 @@ resource "azurerm_key_vault" "main" {
 
   tags = var.tags
 }
+
+resource "azurerm_key_vault_secret" "postgres_username" {
+  name         = "postgres-username"
+  value        = var.postgres_username
+  key_vault_id = azurerm_key_vault.main.id
+
+  depends_on = [azurerm_key_vault.main]
+}
+
+resource "azurerm_key_vault_secret" "postgres_password" {
+  name         = "postgres-password"
+  value        = random_password.postgres_password.result
+  key_vault_id = azurerm_key_vault.main.id
+
+  depends_on = [azurerm_key_vault.main]
+}
+
+resource "azurerm_key_vault_secret" "postgres_database" {
+  name         = "postgres-database"
+  value        = var.postgres_database
+  key_vault_id = azurerm_key_vault.main.id
+
+  depends_on = [azurerm_key_vault.main]
+}
