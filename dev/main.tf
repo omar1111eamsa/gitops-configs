@@ -1,5 +1,11 @@
 data "azurerm_client_config" "current" {}
 
+resource "azurerm_role_assignment" "aks_admin" {
+  scope                = azurerm_kubernetes_cluster.main.id
+  role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
+  principal_id          = data.azurerm_client_config.current.object_id
+}
+
 resource "azurerm_resource_group" "main" {
   name     = "${var.resource_group_name}-${var.environment}"
   location = var.location
