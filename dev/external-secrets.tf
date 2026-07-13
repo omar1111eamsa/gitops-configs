@@ -80,6 +80,7 @@ resource "kubectl_manifest" "postgres_external_secret" {
     kubectl_manifest.secret_store,
     azurerm_key_vault_secret.postgres_username,
     azurerm_key_vault_secret.postgres_password,
-    azurerm_key_vault_secret.postgres_database
+    azurerm_key_vault_secret.postgres_database,
+    kubernetes_namespace.app
   ]
 }
