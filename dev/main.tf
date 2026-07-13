@@ -54,3 +54,12 @@ resource "azurerm_role_assignment" "aks_network_contributor" {
   role_definition_name = "Network Contributor"
   principal_id         = azurerm_kubernetes_cluster.main.identity[0].principal_id
 }
+
+resource "time_sleep" "wait_for_cluster" {
+  depends_on = [
+    azurerm_kubernetes_cluster.main,
+    azurerm_role_assignment.aks_admin,
+    azurerm_role_assignment.aks_network_contributor
+  ]
+  create_duration = "60s"
+}
