@@ -53,3 +53,21 @@ variable "node_max_count" {
   type        = number
   default     = 3
 }
+
+variable "key_vault_sku" {
+  description = "Key Vault SKU (standard or premium)"
+  type        = string
+  default     = "standard"
+}
+
+variable "postgres_username" {
+  description = "Username stored in Key Vault for the Postgres database"
+  type        = string
+  default     = "postgres"
+}
+
+variable "postgres_database" {
+  description = "Database name stored in Key Vault"
+  type        = string
+  default     = "appdb"
+}
