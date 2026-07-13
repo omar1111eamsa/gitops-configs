@@ -63,3 +63,14 @@ resource "azurerm_key_vault_secret" "postgres_database" {
 
   depends_on = [azurerm_key_vault.main]
 }
+resource "azurerm_key_vault_access_policy" "aks_kubelet" {
+  key_vault_id = azurerm_key_vault.main.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = azurerm_kubernetes_cluster.main.kubelet_identity[0].object_id
+
+  secret_permissions = [
+    "Get", "List"
+  ]
+
+  depends_on = [azurerm_kubernetes_cluster.main]
+}
