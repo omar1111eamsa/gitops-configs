@@ -3,7 +3,7 @@ data "azurerm_client_config" "current" {}
 resource "azurerm_role_assignment" "aks_admin" {
   scope                = azurerm_kubernetes_cluster.main.id
   role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
-  principal_id          = data.azurerm_client_config.current.object_id
+  principal_id         = data.azurerm_client_config.current.object_id
 }
 
 resource "azurerm_resource_group" "main" {
@@ -20,12 +20,12 @@ resource "azurerm_kubernetes_cluster" "main" {
   kubernetes_version  = var.kubernetes_version
 
   default_node_pool {
-    name                 = "default"
-    vm_size              = var.vm_size
-    os_disk_size_gb      = 30
+    name                = "default"
+    vm_size             = var.vm_size
+    os_disk_size_gb     = 30
     enable_auto_scaling = true
-    min_count            = var.node_min_count
-    max_count            = var.node_max_count
+    min_count           = var.node_min_count
+    max_count           = var.node_max_count
   }
 
   identity {
