@@ -10,9 +10,8 @@ resources:
   - frontend-complete.yaml
   - external-secrets-placeholder.yaml
 
-  commonAnnotations:
-    app.kubernetes.io/version: "1.0"
-
+commonAnnotations:
+  app.kubernetes.io/version: "1.0"
 
 images:
   - name: itsbaivab/frontend
@@ -21,7 +20,6 @@ images:
     newTag: latest
   - name: postgres
     newTag: "15"
-
 
 replicas:
   - name: frontend
