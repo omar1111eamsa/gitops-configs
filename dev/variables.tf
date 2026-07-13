@@ -24,3 +24,32 @@ variable "tags" {
     managedBy = "terraform"
   }
 }
+variable "kubernetes_cluster_name" {
+  description = "Base name for the AKS cluster (environment gets appended)"
+  type        = string
+  default     = "aks-gitops"
+}
+
+variable "kubernetes_version" {
+  description = "Kubernetes version for the AKS cluster"
+  type        = string
+  default     = "1.29"
+}
+
+variable "vm_size" {
+  description = "VM size for the default node pool"
+  type        = string
+  default     = "Standard_D2s_v3"
+}
+
+variable "node_min_count" {
+  description = "Minimum node count for cluster autoscaler"
+  type        = number
+  default     = 1
+}
+
+variable "node_max_count" {
+  description = "Maximum node count for cluster autoscaler"
+  type        = number
+  default     = 3
+}
