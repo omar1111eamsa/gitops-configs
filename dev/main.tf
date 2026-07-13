@@ -23,7 +23,7 @@ resource "azurerm_kubernetes_cluster" "main" {
     name                 = "default"
     vm_size              = var.vm_size
     os_disk_size_gb      = 30
-    auto_scaling_enabled = true
+    enable_auto_scaling = true
     min_count            = var.node_min_count
     max_count            = var.node_max_count
   }
