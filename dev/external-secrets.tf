@@ -44,7 +44,8 @@ resource "kubectl_manifest" "secret_store" {
 
   depends_on = [
     helm_release.external_secrets,
-    azurerm_key_vault_access_policy.aks_kubelet
+    azurerm_key_vault_access_policy.aks_kubelet,
+    kubernetes_namespace.app
   ]
 }
 
