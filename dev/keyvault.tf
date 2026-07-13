@@ -15,3 +15,27 @@ resource "random_password" "postgres_password" {
   lower   = true
   numeric = true
 }
+
+resource "azurerm_key_vault" "main" {
+  name                = "kv-${var.environment}-${random_string.suffix.result}"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+  sku_name            = var.key_vault_sku
+
+  soft_delete_retention_days = 7
+  purge_protection_enabled   = false
+
+  # Access policy for you (the identity running Terraform) so you can
+  # create/read/delete secrets during apply and for troubleshooting
+  access_policy {
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
+
+    secret_permissions = [
+      "Get", "List", "Set", "Delete", "Purge", "Recover"
+    ]
+  }
+
+  tags = var.tags
+}
